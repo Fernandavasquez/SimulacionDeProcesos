@@ -9,36 +9,42 @@ package classes;
  * @author palit
  */
 public class Proceso {
-    private Integer tamanio;
-    private Integer tiempo;
-    private Integer proceso;
-
- 
-    private String planificador;
-    private String base;
-    private String limite;
-    private String hexadecimal;
-    private int posicion;
-    private int sumaT;
+    private Integer tamanio;                // tamanio del proceso
+    private Integer tiempo;                 // tiempo que se tarda en S
+    private String proceso;                 // nombre del proceso
+    
+    private Integer planificador;           // varia conforme el planificador
+    private String base;                    // base en hexa
+    private String limite;                  // limite en hexa
+    private String hexadecimal;             // el tamanio en hexa
+    private Integer posicion;               // posicion en memoria    
+    //private int sumaT;
     
     public Proceso(){
         this.tiempo=0;
     }
-   
-    public int getPosicion() {
+    
+    public Proceso(Integer min) {
+        this.tiempo = min;
+        this.tamanio = tiempo*90; // El maximo de la memoria principal es de 30 segundos
+        this.hexadecimal= Integer.toHexString(this.tamanio);
+    }
+    
+    public Proceso(Integer min, String Proceso) {
+        this.proceso = Proceso;
+        this.tiempo = min;
+        this.tamanio = tiempo*68; // El maximo de la memoria principal es de 30 segundos 
+        this.hexadecimal= Integer.toHexString(this.tamanio);
+    }
+    
+   public int getPosicion() {
         return posicion;
     }
 
     public void setPosicion(int posicion) {
         this.posicion = posicion;
     }
-    
-    public Proceso(Integer min) {
-        this.tiempo = sumaT;
-        this.tamanio = tiempo*90; // El maximo de la memoria principal es de 30 segundos
-        this.hexadecimal= Integer.toHexString(this.tamanio);
-    }
-
+ 
     public String getHexadecimal() {
         return hexadecimal;
     }
@@ -49,15 +55,13 @@ public class Proceso {
     
     public void setTiempo(Integer tiempo) {
         this.tiempo = tiempo;
-        this.tamanio = tiempo*90; // El maximo de la memoria principal es de 30 segundos
-        this.hexadecimal= Integer.toHexString(this.tamanio);
     }
     
-    public Integer getProceso() {
+    public String getProceso() {
         return proceso;
     }
 
-    public void setProceso(Integer proceso) {
+    public void setProceso(String proceso) {
         this.proceso = proceso;
     }
     
@@ -70,31 +74,30 @@ public class Proceso {
     }
     
     public Integer getTamanioEnPix() {
-        return (tamanio*300/2000);
+        return (tamanio*397/2000);
     }
-    public void setBasehexa(Integer posicion)
-    {
-            this.base=Integer.toHexString(posicion);
+    
+    public void setPlanificador(Integer planificador){
+        this.planificador= planificador;
     }
-    public String getBasehexa()
-    {
-           return base;
-    }
-      public void setLimitehexa(Integer posicion,Integer tamanio)
-    {
-            int limit;
-            limit=posicion+tamanio;
-            this.limite=Integer.toHexString(limit);
-    }
-    public String getLimitehexa()
-    {
-           return limite;
-    }
-       public String getPlanificador() {
+    
+    public Integer getPlanificador(){
         return planificador;
     }
-
-    public void setPlanificador(String planificador) {
-        this.planificador = planificador;
+    
+    public void setBaseHexa(String base){
+        this.base=base;  
+    }
+    
+    public String getBaseHexa(){
+        return "0x"+base.toUpperCase()+"h";
+    }
+    
+    public void setLimiteHexa(String limite){
+        this.limite=limite;  
+    }
+    
+    public String getLimiteHexa(){
+        return "0x"+limite.toUpperCase()+"h";
     }
 }
