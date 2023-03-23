@@ -14,7 +14,7 @@ import java.awt.Graphics2D;
  *
  * @author criss
  */
-public class Grafica {
+public class Grafica{
     private static final Font font = new Font("Arial", Font.BOLD, 14);
     private static final Font label = new Font("Arial", Font.CENTER_BASELINE, 12);
     private static Graphics2D g2d;
@@ -80,6 +80,6 @@ public class Grafica {
         g2d.clearRect(x-1, y-2, width+2, height+4);
         g2d.setColor(Color.black);
         g2d.setStroke(grosor);
-        g2d.drawRect(0, 0, 150, 407);
+        g2d.drawRect(0, 0, 149, 404);
     }
 }

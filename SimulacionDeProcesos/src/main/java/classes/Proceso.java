@@ -12,6 +12,7 @@ public class Proceso {
     private Integer tamanio;                // tamanio del proceso
     private Integer tiempo;                 // tiempo que se tarda en S
     private String proceso;                 // nombre del proceso
+    private Integer tabla;                  // numero de la tabla si es aceptado
     
     private Integer planificador;           // varia conforme el planificador
     private String base;                    // base en hexa
@@ -99,5 +100,12 @@ public class Proceso {
     
     public String getLimiteHexa(){
         return "0x"+limite.toUpperCase()+"h";
+    }
+    
+    public void setPosicionTabla(Integer posicion){
+        this.tabla = posicion;
+    }
+    public Integer getPosicionTabla(){
+        return this.tabla;
     }
 }
