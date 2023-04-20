@@ -78,7 +78,7 @@ public class frmMain extends javax.swing.JFrame {
         tabla.setColumnIdentifiers(titulo);
         jTable1.setModel(tabla);
 
-        String[] heders = new String[]{"ID", "Estado", "HoraLlegada", "HoraFinal"};
+        String[] heders = new String[]{"ID", "Estado", "Hora Inicio", "Hora Final"};
         tablaCPU.setColumnIdentifiers(heders);
         jTable2.setModel(tablaCPU);
     }
@@ -783,11 +783,13 @@ public class frmMain extends javax.swing.JFrame {
             Boolean[] atendiendo = new Boolean[listaPlanifador.length];
             Boolean[] terminado = new Boolean[listaPlanifador.length];
             Boolean[] verificado = new Boolean[listaPlanifador.length];
+            Boolean[] hora = new Boolean[listaPlanifador.length];
             Integer numeroProcesos = listaPlanifador.length;
             Integer quantum = 4;
             Integer aux;
             Integer aux3 = 0, tiempos = 0, aceptados=0;
             String aux2;
+            boolean enCola = false; // variable para saber si existen procesos en cola o si ya todos fueron verificados.
             int contador = 0;
             atributosProceso = new Proceso[listaPlanifador.length];
             int basey = jPMemoria.getHeight() - 1;
@@ -818,6 +820,7 @@ public class frmMain extends javax.swing.JFrame {
                 atendiendo[i] = false;
                 terminado[i] = false;
                 verificado[i] = false;
+                hora[i] = false;
                 atributosProceso[i] = new Proceso(listaTiempoProceso[i], listaPlanifador[i]);
             }
             aux = 0;
@@ -829,7 +832,8 @@ public class frmMain extends javax.swing.JFrame {
                             tiempos = tiempos + listaTiempoProceso[i];
                             entradadeProceso[i] = true;
                             verificado[i] = true;
-                            insertarHistorial(listaPlanifador[i], "Listo", jLabel7.getText(), "");
+                            //insertarHistorial(listaPlanifador[i], "Listo", jLabel7.getText(), "");
+                            insertarHistorial(listaPlanifador[i], "Listo", "", "");
                             Grafica.hacerGrafica(jPMemoria.getGraphics(), 1, basey - atributosProceso[i].getTamanioEnPix(), 148, atributosProceso[i].getTamanioEnPix(), listaPlanifador[i], Color.BLUE);
                             atributosProceso[i].setPosicion(basey - atributosProceso[i].getTamanioEnPix());
                             basey = basey - atributosProceso[i].getTamanioEnPix();
@@ -845,10 +849,12 @@ public class frmMain extends javax.swing.JFrame {
                             Error(listaPlanifador[i]);
                             verificado[i] = true;
                         }
+                       enCola=false;
                     } 
                     else {
                         if (listaTiempoEntrada[i] > 0) {
                             listaTiempoEntrada[i] = listaTiempoEntrada[i] - 1;
+                            enCola = true;
                         }
                     }
                 }
@@ -892,7 +898,9 @@ public class frmMain extends javax.swing.JFrame {
                         //Grafica.hacerGrafica(jPMemoria.getGraphics(), 1, atributosProceso[aux3].getPosicion(), 147, atributosProceso[aux3].getTamanioEnPix(), listaPlanifador[aux3], Color.GRAY);
                         Grafica.eliminarGrafica(jPMemoria.getGraphics(), 1, atributosProceso[aux3].getPosicion(), 148, atributosProceso[aux3].getTamanioEnPix());
                         contador++;
-                        if (contador == aceptados) {
+                        
+                        //Condicion para terminar el hilo (Si todos fueron verificados y no existen en cola)
+                        if ((contador == aceptados) && !enCola) {
                             btnVaciar.setEnabled(true);
                             jPNomenclatura.setVisible(false);
                             Grafica.limpiarLabels(jPLabels.getGraphics());
@@ -901,6 +909,12 @@ public class frmMain extends javax.swing.JFrame {
                     }
                 } else if (entradadeProceso[aux3] == true && atendiendo[aux3] == true) {
                     //Atiende
+                    //Condicion que coloca la hora en el sistema la primera vez que es ejecutado
+                    if(!hora[aux3]){
+                        tablaCPU.setValueAt(jLabel7.getText(), atributosProceso[aux3].getPosicionTabla(), 2);
+                        hora[aux3] = true;
+                    }
+                    
                     quantum = quantum - 1;
                     listaTiempoProceso[aux3] = listaTiempoProceso[aux3] - 1;
                     tablaCPU.setValueAt("Ejecutando", atributosProceso[aux3].getPosicionTabla(), 1);
@@ -909,7 +923,7 @@ public class frmMain extends javax.swing.JFrame {
                 }
 
                 try {
-                    Thread.sleep(840);
+                    Thread.sleep(845);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
